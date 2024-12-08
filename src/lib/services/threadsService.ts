@@ -39,28 +39,40 @@ export class ThreadsService extends AbstractService {
   extractUserData(userCell: Element): CrawledUserInfo {
     const textContent = (userCell as HTMLElement).textContent;
 
-    const parts = textContent?.split(/(?=[A-Z])/).map((part) => part.trim()) ?? [];
+    const parts =
+      textContent?.split(/(?=[A-Z])/).map((part) => part.trim()) ?? [];
     console.log("Split parts:", parts);
 
     // Remove unwanted words and parts containing digits (follower counts) or 'K' (thousands of followers)
-    const filteredParts = parts.filter(part => 
-        !part.match(/\d/) && 
+    const filteredParts = parts.filter(
+      (part) =>
+        !part.match(/\d/) &&
         !part.includes("K") &&
-        part !== "Verified" && 
-        part !== "Following" && 
-        part !== "Follow" && 
-        part !== "followers"
+        part !== "Verified" &&
+        part !== "Following" &&
+        part !== "Follow" &&
+        part !== "followers",
     );
     console.log("Filtered parts:", filteredParts);
 
     const _accountName = filteredParts.length > 0 ? filteredParts[0] : "";
-    const displayName = filteredParts.length > 1 ? filteredParts.slice(1).join(" ") : "";
-    console.log("Extracted account name and display name:", _accountName, displayName);
+    const displayName =
+      filteredParts.length > 1 ? filteredParts.slice(1).join(" ") : "";
+    console.log(
+      "Extracted account name and display name:",
+      _accountName,
+      displayName,
+    );
 
     const accountName = _accountName.replaceAll(".", "");
     const accountNameRemoveUnderscore = accountName.replaceAll("_", ""); // bsky does not allow underscores in handle, so remove them.
     const accountNameReplaceUnderscore = accountName.replaceAll("_", "-");
-    console.log("Processed account names:", accountName, accountNameRemoveUnderscore, accountNameReplaceUnderscore);
+    console.log(
+      "Processed account names:",
+      accountName,
+      accountNameRemoveUnderscore,
+      accountNameReplaceUnderscore,
+    );
 
     const avatarElement = userCell.querySelector("img");
     const avatarSrc = avatarElement?.getAttribute("src") ?? "";

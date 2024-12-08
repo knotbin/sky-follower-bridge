@@ -24,13 +24,14 @@ export abstract class AbstractService {
         MESSAGE_NAME_TO_QUERY_PARAM_MAP[this.messageName],
       ),
     );
-  
+
     const users = Array.from(userCells)
       .map((userCell) => this.extractUserData(userCell))
       .filter((user) => {
         if (!user) return false;
-        const hasUnwantedWords = ["Like", "Reply", "Repost", "Share"].some(word =>
-          user.displayName.includes(word) || user.accountName.includes(word)
+        const hasUnwantedWords = ["Like", "Reply", "Repost", "Share"].some(
+          (word) =>
+            user.displayName.includes(word) || user.accountName.includes(word),
         );
         if (hasUnwantedWords) {
           console.log("Discarding user due to unwanted words:", user);
@@ -38,7 +39,7 @@ export abstract class AbstractService {
         }
         return true;
       });
-  
+
     const filteredUsers = users.filter((user) => {
       const isNewUser = !this.crawledUsers.has(user.accountName);
       if (isNewUser) {
@@ -46,7 +47,7 @@ export abstract class AbstractService {
       }
       return isNewUser;
     });
-  
+
     return filteredUsers;
   }
 
